@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion → Slides · La Porteña</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <span class="emoji">🧁</span>
+      <h1>Notion → Slides</h1>
+      <p class="tagline">Convertí tu calendario de Notion en una presentación lista para Google Slides</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if not authed %}
+      <form method="POST" action="{{ url_for('login') }}" class="form">
+        <label for="password">Contraseña de la agencia</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required autofocus>
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+    {% else %}
+      <form method="POST" action="{{ url_for('generate') }}" class="form" id="genForm">
+        <label for="notion_url">Link de la base de Notion</label>
+        <input type="text" id="notion_url" name="notion_url"
+               placeholder="https://www.notion.so/..." required autofocus>
+        <button type="submit" class="btn" id="genBtn">Generar presentación</button>
+      </form>
+
+      <div class="steps">
+        <p class="steps-title">Después de descargar:</p>
+        <ol>
+          <li>Entrá a <a href="https://drive.google.com" target="_blank" rel="noopener">Google Drive</a> y subí el archivo <code>.pptx</code>.</li>
+          <li>Clic derecho sobre el archivo → <strong>Abrir con</strong> → <strong>Presentaciones de Google</strong>.</li>
+          <li>¡Listo! Ya lo tenés como Google Slides editable.</li>
+        </ol>
+      </div>
+
+      <form method="POST" action="{{ url_for('logout') }}" class="logout">
+        <button type="submit" class="link-btn">Cerrar sesión</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <footer class="page-footer">La Porteña · MKT</footer>
+
+  <script>
+    const form = document.getElementById('genForm');
+    if (form) {
+      form.addEventListener('submit', function () {
+        const btn = document.getElementById('genBtn');
+        btn.disabled = true;
+        btn.textContent = 'Generando… (puede tardar unos segundos)';
+        // Rehabilitar por si la descarga vuelve y el usuario quiere otra.
+        setTimeout(function () {
+          btn.disabled = false;
+          btn.textContent = 'Generar presentación';
+        }, 12000);
+      });
+    }
+  </script>
+</body>
+</html>
