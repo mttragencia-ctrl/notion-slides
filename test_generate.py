@@ -59,7 +59,7 @@ FIXTURE = [
 
 
 def main():
-    buf = build_deck(FIXTURE, "Julio  2026")
+    buf = build_deck(FIXTURE, "Julio 2026", client_name="La Porteña")
     with open("test_output.pptx", "wb") as f:
         f.write(buf.getvalue())
 
@@ -75,10 +75,12 @@ def main():
             if shape.has_text_frame:
                 all_text.append(shape.text_frame.text)
     blob = "\n".join(all_text)
-    assert "Planificacion de Contenidos" in blob
-    assert "Reel 1" in blob
+    assert "MATTER" in blob
+    assert "LA PORTEÑA" in blob                      # cliente en portada
+    assert "REEL 1" in blob                          # nombre en mayúscula
     assert "CONTENIDO PENDIENTE" in blob
-    assert "GUION" in blob and "COPY" in blob
+    assert "QUÉ VA EN CADA SLIDE" in blob and "COPY" in blob
+    assert "PUBLICACIÓN" in blob
 
     print(f"OK · {n} slides generadas · test_output.pptx")
     for i, slide in enumerate(prs.slides):

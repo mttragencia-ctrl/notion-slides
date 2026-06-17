@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notion → Slides · La Porteña</title>
+  <title>Matter · Notion → Slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="card">
     <div class="brand">
-      <span class="emoji">🧁</span>
+      <div class="wordmark"><span class="mark"></span>MATTER</div>
       <h1>Notion → Slides</h1>
-      <p class="tagline">Convertí tu calendario de Notion en una presentación lista para Google Slides</p>
+      <p class="tagline">Convertí el calendario de Notion de cualquier cliente en una presentación lista para Google Slides</p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -30,6 +32,10 @@
       </form>
     {% else %}
       <form method="POST" action="{{ url_for('generate') }}" class="form" id="genForm">
+        <label for="client_name">Cliente <span class="opt">(opcional)</span></label>
+        <input type="text" id="client_name" name="client_name"
+               placeholder="Ej: La Porteña">
+
         <label for="notion_url">Link de la base de Notion</label>
         <input type="text" id="notion_url" name="notion_url"
                placeholder="https://www.notion.so/..." required autofocus>
@@ -51,7 +57,7 @@
     {% endif %}
   </div>
 
-  <footer class="page-footer">La Porteña · MKT</footer>
+  <footer class="page-footer">MATTER · Studio</footer>
 
   <script>
     const form = document.getElementById('genForm');

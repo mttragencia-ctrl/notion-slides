@@ -74,6 +74,7 @@ def logout():
 @login_required
 def generate():
     notion_url = request.form.get("notion_url", "").strip()
+    client_name = request.form.get("client_name", "").strip() or None
 
     if not NOTION_TOKEN:
         flash("Falta configurar NOTION_TOKEN en el servidor.", "error")
@@ -105,7 +106,7 @@ def generate():
         flash("La base no tiene filas para convertir.", "error")
         return redirect(url_for("index"))
 
-    buf = build_deck(items, deck_title)
+    buf = build_deck(items, deck_title, client_name=client_name)
     return send_file(
         buf,
         as_attachment=True,
